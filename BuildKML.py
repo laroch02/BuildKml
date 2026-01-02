@@ -4,7 +4,11 @@ Created on 29 juill. 2019
 @author: david.larochelle
 '''
 
-import sys, getopt
+import sys
+import getopt
+import os
+from tkinter import filedialog
+from KML import KML
 if __name__ == '__main__':
     pass
 
@@ -31,9 +35,6 @@ for opt, arg in opts:
         KMLFileName = str(arg)
 print ('Min Distance is ' + str(MinDistance) + " Meters.")
 
-from tkinter import filedialog
-from KML import KML
-import os
 
 # Create KML object
 MyKML = KML("Unnamed")
