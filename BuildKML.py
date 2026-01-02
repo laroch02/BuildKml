@@ -3,7 +3,6 @@ Created on 29 juill. 2019
 
 @author: david.larochelle
 '''
-
 import sys
 import getopt
 import os
