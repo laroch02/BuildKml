@@ -59,14 +59,18 @@ if len(folder_list) == 0:
     sys.exit()
 
 # Scan all selected foders for image files with GPS info
-nb_files = 0
+total_nb_files = 0
+current_file_qty = 0
 for foldername in folder_list:
     print("Scanning files in folder " + foldername + " ...")
-    nb_files += my_kml.scan_folder(folder=foldername)
+    current_file_qty = my_kml.scan_folder(folder=foldername)
+    print("\t" + str(current_file_qty) + " files imported from folder " + foldername)
+    total_nb_files += current_file_qty
 
-print("Imported " + str(nb_files) + " files from folders.")
 
-if nb_files == 0:
+print("Imported " + str(total_nb_files) + " files from folders.")
+
+if total_nb_files == 0:
     # Canceled by user
     print("No GPS info found in folder. Aborting.")
     sys.exit()

@@ -53,14 +53,22 @@ class Kml:
             file_list.extend(
                 base_folder.glob("**/" + file_type)
             )  # # ** allows to parse forlder recursively
+        
+        # exclude files beginning with ._
+        file_list = [f for f in file_list if not f.name.startswith("._")]
 
         # import os
         nb_files = 0
+        index = 0
         for my_file in file_list:
+            # print the index of the file being processed
+            index += 1
+            print("\tProcessing file: " + str(index) + "/" + str(len(file_list)), end="\r")
             try:
                 tags = exifread.process_file(open(str(my_file), "rb"))
-            except (IOError, OSError) as e:
-                print(f"\tCould not read exif from file {my_file}: {e}")
+            except (IOError, OSError):# as e:
+                #print(f"\tCould not read exif from file {my_file}: {e}")
+                continue
 
             try:
                 my_lat = self._convert_to_degress(tags["GPS GPSLatitude"])
@@ -74,10 +82,11 @@ class Kml:
                 self._add_placemark(my_lat, my_lon, str(my_file), folder)
                 nb_files += 1
 
-            except (KeyError, AttributeError, IndexError) as e:
-                print(f"\tCould not extract GPS info from file {my_file}: {e}")
+            except (KeyError, AttributeError, IndexError):# as e:
+                #print(f"\tCould not extract GPS info from file {my_file}: {e}")
+                continue
 
-        print(str(nb_files) + " files have coordinates in folder " + folder)
+        #print(str(nb_files) + "/" + str(len(file_list)) + " files have coordinates in folder " + folder)
         return nb_files
 
     def _add_placemark(
