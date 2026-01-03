@@ -8,7 +8,7 @@ import sys
 import getopt
 import os
 from tkinter import filedialog
-from KML import KML
+from Kml import Kml
 
 if __name__ == "__main__":
     pass
@@ -38,7 +38,7 @@ print("Min Distance is " + str(min_distance) + " Meters.")
 
 
 # Create KML object
-my_kml = KML("Unnamed")
+my_kml = Kml("Unnamed")
 
 # Build a list of folders to scan if not provided on command line
 folder_list = []
@@ -92,5 +92,5 @@ if ext.lower() != ".kml":
 
 _, my_kml.map_name = os.path.split(kml_file_name)
 my_kml.min_distance_between_placemarks = min_distance
-file_saved = my_kml.save_kml_file(kml_file_name)
+FILE_SAVED = my_kml.save_kml_file(kml_file_name)
 print(kml_file_name + " exported successfully.")

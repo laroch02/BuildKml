@@ -5,15 +5,16 @@ Created on 29 juill. 2019
 """
 
 import math
+import os
 from pathlib import Path
-import exifread
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
+import exifread
 
 
-class KML:
+class Kml:
     """
-    KML Class is created to handle scanning of multiple image files in multiple folders and ultimately export a KML file compatible
+    Kml Class is created to handle scanning of multiple image files in multiple folders and ultimately export a Kml file compatible
     with Google Maps import.
     For large number of placemarks, a minimum distance can be specified so close placemarks from one another will not be exported.
     """
@@ -92,7 +93,6 @@ class KML:
         )
 
     def _get_kml_string(self):
-
         # create the file structure
         root = ET.Element("kml")
         root.set("xmlns", "http://www.opengis.net/kml/2.2")
@@ -109,8 +109,6 @@ class KML:
         folder = ET.SubElement(document, "Folder")
         folder_name = ET.SubElement(folder, "name")
         folder_name.text = self._placemark_list[0]["Folder"]
-
-        import os
 
         nb_files_to_export = 0
         for my_coord in self._placemark_list:
