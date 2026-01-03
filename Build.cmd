@@ -1,4 +1,4 @@
 rem Set current directory to the batchfile directory.
 cd /d %~dp0
-pyinstaller BuildKML.py --onefile -n BuildKML
+pyinstaller build_kml.py --onefile -n build_kml
 pause
