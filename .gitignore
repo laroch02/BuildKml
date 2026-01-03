@@ -1,9 +1,9 @@
 .project
 .pydevproject
-/build/
-/dist/
+build
+dist
+.venv
 /__pycache__/
 .vscode/settings.json
 debug.log
-BuildKML.spec
-BuildKML.spec
+
