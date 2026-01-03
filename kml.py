@@ -49,17 +49,29 @@ class Kml:
         :param folder: (string)
         :rtype: int
         """
-        # Get list of files
+        # Get list of files (case-insensitive extension matching)
         base_folder = Path(folder)
-        file_types = ("*.jpg", "*.jpeg", "*.dng")
-        file_list = []
-        for file_type in file_types:
-            file_list.extend(
-                base_folder.glob("**/" + file_type)
-            )  # # ** allows to parse forlder recursively
 
-        # exclude files beginning with ._ (metadata files on macOS)
-        file_list = [f for f in file_list if not f.name.startswith("._")]
+        # Define valid extensions (case-insensitive)
+        valid_extensions = {
+            ".jpg",
+            ".jpeg",
+            ".dng",
+            ".tif",
+            ".tiff",
+            ".png",
+            ".heic",
+            ".heif",
+        }
+
+        # Get all files recursively and filter by extension (case-insensitive)
+        # Using .suffix.lower() ensures matching works on all platforms (Linux, macOS, Windows)
+        file_list = [
+            f
+            for f in base_folder.glob("**/*")
+            if f.suffix.lower() in valid_extensions
+            and not f.name.startswith("._")  # exclude macOS metadata files
+        ]
 
         # import os
         nb_files = 0
