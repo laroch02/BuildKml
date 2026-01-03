@@ -62,7 +62,7 @@ if len(folder_list) == 0:
 nb_files = 0
 for foldername in folder_list:
     print("Scanning files in folder " + foldername + " ...")
-    nb_files += my_kml.ScanFolder(folder=foldername)
+    nb_files += my_kml.scan_folder(folder=foldername)
 
 print("Imported " + str(nb_files) + " files from folders.")
 
@@ -90,7 +90,7 @@ if kml_file_name == "":
 if ext.lower() != ".kml":
     kml_file_name = file + ".kml"
 
-_ , my_kml.map_name = os.path.split(kml_file_name)
+_, my_kml.map_name = os.path.split(kml_file_name)
 my_kml.min_distance_between_placemarks = min_distance
-file_saved = my_kml.SaveKMLFile(kml_file_name)
+file_saved = my_kml.save_kml_file(kml_file_name)
 print(kml_file_name + " exported successfully.")
