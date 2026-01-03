@@ -19,12 +19,12 @@ class Kml:
     For large number of placemarks, a minimum distance can be specified so close placemarks from one another will not be exported.
     """
 
-    # Member variablesß
+    # Member variables
     map_name = ""
     map_description = ""
     _placemark_list = []
     _placemark_list_is_ordered = False
-    min_distance_between_placemarks = 0  # minimum distance there as to be from previous point for current placemark to be exported.
+    min_distance_between_placemarks_in_meters = 0  # minimum distance there as to be from previous point for current placemark to be exported.
 
     def __init__(self, map_name: str):
         """
@@ -187,7 +187,7 @@ class Kml:
 
         print(
             "\tMin Distance Between Placemarks set to "
-            + str(self.min_distance_between_placemarks)
+            + str(self.min_distance_between_placemarks_in_meters)
             + " meters."
         )
 
@@ -204,7 +204,7 @@ class Kml:
                         kept_coord["Latitude"],
                         kept_coord["Longitude"],
                     )
-                    < self.min_distance_between_placemarks
+                    < self.min_distance_between_placemarks_in_meters
                 ):
                     my_coord["Export"] = False
                     break

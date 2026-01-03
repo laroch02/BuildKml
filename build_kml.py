@@ -14,7 +14,7 @@ if __name__ == "__main__":
     pass
 
 # default value
-min_distance = 2000
+min_distance_in_meters = 2000
 input_paths = ""
 kml_file_name = ""
 
@@ -29,12 +29,12 @@ for opt, arg in opts:
         print("test.py -d MinDistance -i InputPathsCommaSeparated -o OutputFile")
         sys.exit()
     elif opt in ("-d"):
-        min_distance = int(arg)
+        min_distance_in_meters = int(arg)
     elif opt in ("-i"):
         input_paths = str(arg)
     elif opt in ("-o"):
         kml_file_name = str(arg)
-print("Min Distance is " + str(min_distance) + " Meters.")
+print("Min Distance is " + str(min_distance_in_meters) + " Meters.")
 
 
 # Create KML object
@@ -76,7 +76,7 @@ if total_nb_files == 0:
     sys.exit()
 
 # FilteredQty = my_kml.FilterPlacemarks(min_distance)
-my_kml.min_distance_between_placemarks = min_distance
+my_kml.min_distance_between_placemarks_in_meters = min_distance_in_meters
 
 # Export KML file
 if kml_file_name == "":
@@ -95,6 +95,6 @@ if ext.lower() != ".kml":
     kml_file_name = file + ".kml"
 
 _, my_kml.map_name = os.path.split(kml_file_name)
-my_kml.min_distance_between_placemarks = min_distance
+my_kml.min_distance_between_placemarks_in_meters = min_distance_in_meters
 FILE_SAVED = my_kml.save_kml_file(kml_file_name)
 print(kml_file_name + " exported successfully.")
