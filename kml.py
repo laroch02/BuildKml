@@ -38,6 +38,10 @@ class Kml:
     def __str__(self):
         return "This is My KML : " + self.map_name
 
+    # Method to clear pacemark list and start fresh
+    def clear_placemarks(self):
+        self._placemark_list = []
+
     def scan_folder(self, folder: str):
         """
         Scans folders recursively to build a list of compatible image files,
@@ -53,8 +57,8 @@ class Kml:
             file_list.extend(
                 base_folder.glob("**/" + file_type)
             )  # # ** allows to parse forlder recursively
-        
-        # exclude files beginning with ._
+
+        # exclude files beginning with ._ (metadata files on macOS)
         file_list = [f for f in file_list if not f.name.startswith("._")]
 
         # import os
@@ -63,11 +67,13 @@ class Kml:
         for my_file in file_list:
             # print the index of the file being processed
             index += 1
-            print("\tProcessing file: " + str(index) + "/" + str(len(file_list)), end="\r")
+            print(
+                "\tProcessing file: " + str(index) + "/" + str(len(file_list)), end="\r"
+            )
             try:
                 tags = exifread.process_file(open(str(my_file), "rb"))
-            except (IOError, OSError):# as e:
-                #print(f"\tCould not read exif from file {my_file}: {e}")
+            except (IOError, OSError):  # as e:
+                # print(f"\tCould not read exif from file {my_file}: {e}")
                 continue
 
             try:
@@ -77,16 +83,15 @@ class Kml:
                 my_lon = self._convert_to_degress(tags["GPS GPSLongitude"])
                 if tags["GPS GPSLongitudeRef"].values[0] != "E":
                     my_lon = -my_lon
-                # FilePath , FileName = os.path.split(my_file)
-                # BasePath, FirstFolder = os.path.split(FilePath)
+
                 self._add_placemark(my_lat, my_lon, str(my_file), folder)
                 nb_files += 1
 
-            except (KeyError, AttributeError, IndexError):# as e:
-                #print(f"\tCould not extract GPS info from file {my_file}: {e}")
+            except (KeyError, AttributeError, IndexError):  # as e:
+                # print(f"\tCould not extract GPS info from file {my_file}: {e}")
                 continue
 
-        #print(str(nb_files) + "/" + str(len(file_list)) + " files have coordinates in folder " + folder)
+        # print(str(nb_files) + "/" + str(len(file_list)) + " files have coordinates in folder " + folder)
         return nb_files
 
     def _add_placemark(
@@ -236,7 +241,7 @@ class Kml:
 
     def _distance_between_placemarks(
         self, lat1: float, lon1: float, lat2: float, lon2: float
-    ):
+    ) -> float:
         radius = 6378.137  # // Radius of earth in KM
         d_lat = lat2 * math.pi / 180 - lat1 * math.pi / 180
         d_lon = lon2 * math.pi / 180 - lon1 * math.pi / 180
