@@ -87,6 +87,9 @@ class Kml:
             except (IOError, OSError):  # as e:
                 # print(f"\tCould not read exif from file {my_file}: {e}")
                 continue
+            except TypeError as e:
+                print(f"\tUnexpected error reading exif from file {my_file}: {e}")
+                continue
 
             try:
                 my_lat = self._convert_to_degress(tags["GPS GPSLatitude"])
@@ -98,7 +101,9 @@ class Kml:
 
                 self._add_placemark(my_lat, my_lon, str(my_file), folder)
                 nb_files += 1
-
+            except ValueError:
+                # print(f"\tInvalid GPS coordinate in file {my_file}")
+                continue
             except (KeyError, AttributeError, IndexError):  # as e:
                 # print(f"\tCould not extract GPS info from file {my_file}: {e}")
                 continue
@@ -245,9 +250,13 @@ class Kml:
         :type value: exifread.utils.Ratio
         :rtype: float
         """
-        d = float(ratio.values[0].num) / float(ratio.values[0].den)
-        m = float(ratio.values[1].num) / float(ratio.values[1].den)
-        s = float(ratio.values[2].num) / float(ratio.values[2].den)
+        # Try and catch divide by zero error
+        try:
+            d = float(ratio.values[0].num) / float(ratio.values[0].den)
+            m = float(ratio.values[1].num) / float(ratio.values[1].den)
+            s = float(ratio.values[2].num) / float(ratio.values[2].den)
+        except ZeroDivisionError as e:
+            raise ValueError("Invalid GPS coordinate with zero denominator") from e
 
         return d + (m / 60.0) + (s / 3600.0)
 
